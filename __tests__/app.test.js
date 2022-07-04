@@ -17,7 +17,6 @@ describe("GET /api/categories", () => {
       .expect(200)
       .then(({ body }) => {
         //same as -res.body.categories
-        console.log(body);
         const { categories } = body;
         expect(categories).toBeInstanceOf(Array);
         expect(categories).toHaveLength(4);
