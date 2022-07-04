@@ -7,4 +7,6 @@ app.use(express.json());
 
 app.get("/api/categories", getCategories);
 
+//whatever
+
 module.exports = app;
