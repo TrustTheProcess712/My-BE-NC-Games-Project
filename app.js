@@ -3,6 +3,7 @@ const {
   handleInvalidPaths,
   handle500s,
   handlePsqlErrors,
+  handleCustomErrors,
 } = require("./Controllers/err.c");
 const { getCategories, getReviewById } = require("./Controllers/games.c");
 
@@ -15,6 +16,8 @@ app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReviewById);
 
 app.use("*", handleInvalidPaths);
+
+app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
 
