@@ -1,4 +1,8 @@
-const { fetchCategories, fetchReviewById } = require("../Models/games.m");
+const {
+  fetchCategories,
+  fetchReviewById,
+  updateReviewById,
+} = require("../Models/games.m");
 
 exports.getCategories = (req, res, next) => {
   fetchCategories().then((categories) => {
@@ -15,4 +19,11 @@ exports.getReviewById = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.patchReview = (req, res, next) => {
+  const { review_id } = req.params;
+  const newVote = req.body.inc_votes;
+  console.log(review_id, "<<<<< controller");
+  updateReviewById(review_id, newVote);
 };

@@ -16,8 +16,22 @@ exports.fetchReviewById = (review_id) => {
           msg: `Review not found for review_id: ${review_id}`,
         });
       }
-      // console.log(result.rows); comes back as an array with an object thats why we return result.rows index 0
-      console.log(result.rows);
+      return result.rows[0];
+    });
+};
+
+exports.updateReviewById = (review_id, newVote) => {
+  return db
+    .query(
+      `UPDATE reviews
+     SET votes = votes + $2 
+     WHERE review_id = $1
+     RETURNING *
+  `,
+      [review_id, newVote]
+    )
+    .then((result) => {
+      console.log(result.rows[0], "<<<< model");
       return result.rows[0];
     });
 };
