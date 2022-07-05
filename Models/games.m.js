@@ -31,7 +31,13 @@ exports.updateReviewById = (review_id, newVote) => {
       [review_id, newVote]
     )
     .then((result) => {
-      console.log(result.rows[0], "<<<< model");
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `Review not found for review_id: ${review_id}`,
+        });
+      }
+      // console.log(result.rows[0], "<<<< model");
       return result.rows[0];
     });
 };

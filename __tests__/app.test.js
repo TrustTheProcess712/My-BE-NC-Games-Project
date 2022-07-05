@@ -99,8 +99,8 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(voteUpdate)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review).toEqual({
-          review_id: review_id,
+        expect(body).toEqual({
+          review_id: 2,
           title: "Jenga",
           designer: "Leslie Scott",
           owner: "philippaclaire9",
@@ -111,6 +111,18 @@ describe("PATCH /api/reviews/:review_id", () => {
           created_at: "2021-01-18T10:01:41.251Z",
           votes: 7,
         });
+      });
+  });
+  test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/9999")
+      .expect(404)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Review not found for review_id: 9999");
       });
   });
 });

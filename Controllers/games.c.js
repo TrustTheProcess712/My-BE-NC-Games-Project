@@ -24,6 +24,13 @@ exports.getReviewById = (req, res, next) => {
 exports.patchReview = (req, res, next) => {
   const { review_id } = req.params;
   const newVote = req.body.inc_votes;
-  console.log(review_id, "<<<<< controller");
-  updateReviewById(review_id, newVote);
+
+  updateReviewById(review_id, newVote)
+    .then((review) => {
+      // console.log(review, "<<<<< controller");
+      res.status(200).send(review);
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
