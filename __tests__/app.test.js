@@ -229,9 +229,6 @@ describe("GET /api/reviews/:review_id with a comment_count", () => {
       });
   });
   test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
-    const voteUpdate = {
-      inc_votes: 2,
-    };
     return request(app)
       .get("/api/reviews/9999")
       .expect(404)
@@ -240,9 +237,6 @@ describe("GET /api/reviews/:review_id with a comment_count", () => {
       });
   });
   test("status:400, responds with a bad request error message when passed a bad review ID", () => {
-    const voteUpdate = {
-      inc_votes: 2,
-    };
     return request(app)
       .get("/api/reviews/notAniD")
       .expect(400)
