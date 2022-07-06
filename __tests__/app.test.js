@@ -126,7 +126,7 @@ describe("PATCH /api/reviews/:review_id", () => {
         expect(msg).toBe("Review not found for review_id: 9999");
       });
   });
-  test("status:400, responds with a bad request error message when passed a bad review IDd", () => {
+  test("status:400, responds with a bad request error message when passed a bad review ID", () => {
     const voteUpdate = {
       inc_votes: 2,
     };
@@ -233,21 +233,19 @@ describe("GET /api/reviews/:review_id with a comment_count", () => {
       inc_votes: 2,
     };
     return request(app)
-      .patch("/api/reviews/9999")
+      .get("/api/reviews/9999")
       .expect(404)
-      .send(voteUpdate)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Review not found for review_id: 9999");
       });
   });
-  test("status:400, responds with a bad request error message when passed a bad review IDd", () => {
+  test("status:400, responds with a bad request error message when passed a bad review ID", () => {
     const voteUpdate = {
       inc_votes: 2,
     };
     return request(app)
-      .patch("/api/reviews/notAnId")
+      .get("/api/reviews/notAniD")
       .expect(400)
-      .send(voteUpdate)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad Request, Invalid Input");
       });
