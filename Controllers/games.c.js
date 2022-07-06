@@ -2,6 +2,7 @@ const {
   fetchCategories,
   fetchReviewById,
   updateReviewById,
+  fetchUsers,
 } = require("../Models/games.m");
 
 exports.getCategories = (req, res, next) => {
@@ -27,10 +28,14 @@ exports.patchReview = (req, res, next) => {
 
   updateReviewById(review_id, newVote)
     .then((review) => {
-      // console.log(review, "<<<<< controller");
-      res.status(200).send(review);
+      res.status(200).send({ review });
     })
     .catch((err) => {
       next(err);
     });
+};
+exports.getUsers = (req, res, next) => {
+  fetchUsers().then((users) => {
+    res.status(200).send({ users });
+  });
 };

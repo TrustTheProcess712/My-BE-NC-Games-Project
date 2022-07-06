@@ -98,8 +98,8 @@ describe("PATCH /api/reviews/:review_id", () => {
       .patch("/api/reviews/2")
       .send(voteUpdate)
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toEqual({
+      .then(({ body: { review } }) => {
+        expect(review).toEqual({
           review_id: 2,
           title: "Jenga",
           designer: "Leslie Scott",
@@ -159,6 +159,45 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(voteUpdate)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+});
+
+describe("GET /api/users", () => {
+  test("status:200, responds with an array of objects with the intended properties ", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        expect(users).toHaveLength(4);
+        expect(users).toEqual([
+          {
+            username: "mallionaire",
+            name: "haz",
+            avatar_url:
+              "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+          },
+          {
+            username: "philippaclaire9",
+            name: "philippa",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+          },
+          {
+            username: "bainesface",
+            name: "sarah",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+          },
+          {
+            username: "dav3rid",
+            name: "dave",
+            avatar_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          },
+        ]);
       });
   });
 });

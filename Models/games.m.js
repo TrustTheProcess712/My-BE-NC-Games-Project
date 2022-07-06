@@ -37,7 +37,13 @@ exports.updateReviewById = (review_id, newVote) => {
           msg: `Review not found for review_id: ${review_id}`,
         });
       }
-      // console.log(result.rows[0], "<<<< model");
+
       return result.rows[0];
     });
+};
+exports.fetchUsers = () => {
+  return db.query("SELECT * FROM users;").then((result) => {
+    console.log(result.rows, "<<< model");
+    return result.rows;
+  });
 };
