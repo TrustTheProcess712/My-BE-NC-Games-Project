@@ -11,7 +11,7 @@ beforeEach(() => {
 afterAll(() => db.end());
 
 describe("games api errors", () => {
-  test("status:404, handles bad paths", () => {
+  test("status:404, handles path not found", () => {
     return request(app)
       .get("/api/bad_path")
       .expect(404)
@@ -57,7 +57,6 @@ describe("GET /api/reviews/:review_id", () => {
       .get(`/api/reviews/${review_id}`)
       .expect(200)
       .then(({ body }) => {
-        // console.log(body, "<<<response body");
         expect(body.review).toEqual({
           review_id: review_id,
           title: "Jenga",
@@ -72,10 +71,92 @@ describe("GET /api/reviews/:review_id", () => {
         });
       });
   });
-  test("status:400, responds with an error message when passed a bad review ID", () => {
+  test("status:400, responds with a bad request error message when passed a bad review ID", () => {
     return request(app)
       .get("/api/reviews/notAniD")
       .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
+    return request(app)
+      .get("/api/reviews/9999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Review not found for review_id: 9999");
+      });
+  });
+});
+
+describe("PATCH /api/reviews/:review_id", () => {
+  test("status: 200, responds with vote count updated on review object", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/2")
+      .send(voteUpdate)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          review_id: 2,
+          title: "Jenga",
+          designer: "Leslie Scott",
+          owner: "philippaclaire9",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          review_body: "Fiddly fun for all the family",
+          category: "dexterity",
+          created_at: "2021-01-18T10:01:41.251Z",
+          votes: 7,
+        });
+      });
+  });
+  test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/9999")
+      .expect(404)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Review not found for review_id: 9999");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed a bad review IDd", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed an invalid voteObject object key", () => {
+    const voteUpdate = {
+      incre_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed an invalid voteObject object value", () => {
+    const voteUpdate = {
+      inc_votes: "invalid",
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad Request, Invalid Input");
       });
