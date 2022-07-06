@@ -1,16 +1,5 @@
-const {
-  fetchCategories,
-  fetchReviewById,
-  updateReviewById,
-  fetchUsers,
-} = require("../Models/games.m");
+const { fetchReviewById, updateReviewById } = require("../Models/reviews.m");
 
-exports.getCategories = (req, res, next) => {
-  fetchCategories().then((categories) => {
-    //categories = result.rows
-    res.status(200).send({ categories }); // this is now the data given a categeories key
-  });
-};
 exports.getReviewById = (req, res, next) => {
   const { review_id } = req.params;
   fetchReviewById(review_id)
@@ -33,10 +22,4 @@ exports.patchReview = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-};
-exports.getUsers = (req, res, next) => {
-  fetchUsers().then((users) => {
-    res.status(200).send({ users });
-    //hi
-  });
 };

@@ -5,12 +5,9 @@ const {
   handlePsqlErrors,
   handleCustomErrors,
 } = require("./Controllers/err.c");
-const {
-  getCategories,
-  getReviewById,
-  patchReview,
-  getUsers,
-} = require("./Controllers/games.c");
+const { getReviewById, patchReview } = require("./Controllers/reviews.c");
+const { getCategories } = require("./Controllers/categories.c");
+const { getUsers } = require("./Controllers/users.c");
 
 const app = express();
 
