@@ -68,6 +68,7 @@ describe("GET /api/reviews/:review_id", () => {
           category: "dexterity",
           created_at: "2021-01-18T10:01:41.251Z",
           votes: 5,
+          comment_count: 3,
         });
       });
   });
@@ -198,6 +199,57 @@ describe("GET /api/users", () => {
               "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
           },
         ]);
+      });
+  });
+});
+
+describe("GET /api/reviews/:review_id with a comment_count", () => {
+  test("status: 200, responds with a comment_count added to our review object", () => {
+    const review_id = 2;
+    return request(app)
+      .get(`/api/reviews/${review_id}`)
+      .expect(200)
+      .then(({ body: { review } }) => {
+        console.log(review);
+        expect(review).toEqual(
+          expect.objectContaining({
+            review_id: review_id,
+            title: "Jenga",
+            designer: "Leslie Scott",
+            owner: "philippaclaire9",
+            review_img_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            review_body: "Fiddly fun for all the family",
+            category: "dexterity",
+            comment_count: 3,
+            created_at: "2021-01-18T10:01:41.251Z",
+            votes: 5,
+          })
+        );
+      });
+  });
+  test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/9999")
+      .expect(404)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Review not found for review_id: 9999");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed a bad review IDd", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
       });
   });
 });
