@@ -71,7 +71,7 @@ describe("GET /api/reviews/:review_id", () => {
         });
       });
   });
-  test("status:400, responds with an error message when passed a bad review ID", () => {
+  test("status:400, responds with a bad request error message when passed a bad review ID", () => {
     return request(app)
       .get("/api/reviews/notAniD")
       .expect(400)
@@ -123,6 +123,42 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(voteUpdate)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Review not found for review_id: 9999");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed a bad review IDd", () => {
+    const voteUpdate = {
+      inc_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed an invalid voteObject object key", () => {
+    const voteUpdate = {
+      incre_votes: 2,
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed an invalid voteObject object value", () => {
+    const voteUpdate = {
+      inc_votes: "invalid",
+    };
+    return request(app)
+      .patch("/api/reviews/notAnId")
+      .expect(400)
+      .send(voteUpdate)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
       });
   });
 });
