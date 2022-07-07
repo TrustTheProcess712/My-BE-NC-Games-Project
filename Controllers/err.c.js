@@ -1,6 +1,5 @@
-exports.handleInvalidPaths = (err, req, res, next) => {
+exports.handleInvalidPaths = (req, res, next) => {
   res.status(404).send({ msg: "Invalid Path" });
-  next(err);
 };
 exports.handleCustomErrors = (err, req, res, next) => {
   if (err.status && err.msg) {

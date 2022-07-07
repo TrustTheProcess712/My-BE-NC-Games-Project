@@ -22,7 +22,7 @@ describe("games api errors", () => {
   });
 });
 
-describe("3.GET /api/categories", () => {
+describe("GET /api/categories", () => {
   test("status:200, responds with an array of objects with the properties slug and description", () => {
     return request(app)
       .get("/api/categories")
@@ -51,7 +51,7 @@ describe("3.GET /api/categories", () => {
   });
 });
 
-describe("4.GET /api/reviews/:review_id", () => {
+describe("GET /api/reviews/:review_id", () => {
   test("status:200, responds with a single review object", () => {
     const review_id = 2;
     return request(app)
@@ -91,7 +91,7 @@ describe("4.GET /api/reviews/:review_id", () => {
   });
 });
 
-describe("5.PATCH /api/reviews/:review_id", () => {
+describe("PATCH /api/reviews/:review_id", () => {
   test("status: 200, responds with vote count updated on review object", () => {
     const voteUpdate = {
       inc_votes: 2,
@@ -165,7 +165,7 @@ describe("5.PATCH /api/reviews/:review_id", () => {
   });
 });
 
-describe("6.GET /api/users", () => {
+describe("GET /api/users", () => {
   test("status:200, responds with an array of objects with the intended properties ", () => {
     return request(app)
       .get("/api/users")
@@ -204,7 +204,7 @@ describe("6.GET /api/users", () => {
   });
 });
 
-describe("7.GET /api/reviews/:review_id with a comment_count", () => {
+describe("GET /api/reviews/:review_id with a comment_count", () => {
   test("status: 200, responds with a comment_count added to our review object", () => {
     const review_id = 2;
     return request(app)
@@ -247,7 +247,7 @@ describe("7.GET /api/reviews/:review_id with a comment_count", () => {
   });
 });
 
-describe("4.GET /api/reviews/:review_id", () => {
+describe("GET /api/reviews/:review_id", () => {
   test("status:200, responds with a single review object", () => {
     const review_id = 2;
     return request(app)
@@ -287,8 +287,8 @@ describe("4.GET /api/reviews/:review_id", () => {
   });
 });
 
-describe("8.GET /api/reviews", () => {
-  test.only("status:200, responds with an array of objects containing review data in descending order", () => {
+describe("GET /api/reviews", () => {
+  test("status:200, responds with an array of objects containing review data in descending order", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
@@ -296,7 +296,6 @@ describe("8.GET /api/reviews", () => {
         expect(reviews.length).toBeGreaterThan(0);
         expect(reviews).toBeSortedBy("created_at", {
           descending: true,
-          coerce: true,
         });
         reviews.forEach((review) => {
           expect(review).toEqual(
