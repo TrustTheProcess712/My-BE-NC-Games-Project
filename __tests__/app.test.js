@@ -316,3 +316,51 @@ describe("GET /api/reviews", () => {
       });
   });
 });
+
+describe("GET /api/reviews/:review_id/comments", () => {
+  test("status:200, responds with an array of comments for the given review ID", () => {
+    const review_id = 2;
+    return request(app)
+      .get(`/api/reviews/${review_id}/comments`)
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(3);
+        expect(comments[0]).toEqual(
+          expect.objectContaining({
+            comment_id: 1,
+            body: "I loved this game too!",
+            review_id: 2,
+            author: "bainesface",
+            votes: 16,
+            created_at: "2017-11-22T12:43:33.389Z",
+          })
+        );
+      });
+  });
+  test("status:200, responds with an empty array when comments are not present for that review_id", () => {
+    const review_id = 1;
+    return request(app)
+      .get(`/api/reviews/${review_id}/comments`)
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments.length).toBe(0);
+      });
+  });
+  test("status:400, responds with a bad request error message when passed a bad review ID", () => {
+    return request(app)
+      .get("/api/reviews/notAniD")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
+    return request(app)
+      .get("/api/reviews/775")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Review not found for review_id: 775");
+      });
+  });
+});

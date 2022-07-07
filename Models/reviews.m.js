@@ -45,6 +45,7 @@ exports.updateReviewById = (review_id, newVote) => {
       return result.rows[0];
     });
 };
+
 exports.fetchAllReviews = () => {
   return db
     .query(
@@ -56,7 +57,6 @@ exports.fetchAllReviews = () => {
       ORDER BY created_at DESC`
     )
     .then((result) => {
-      console.log(result.rows, "<<<<<<< model");
       return result.rows;
     });
 };

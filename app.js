@@ -12,6 +12,7 @@ const {
 } = require("./Controllers/reviews.c");
 const { getCategories } = require("./Controllers/categories.c");
 const { getUsers } = require("./Controllers/users.c");
+const { getCommentsById } = require("./Controllers/comments.c");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get("/api/reviews/:review_id", getReviewById);
 app.patch("/api/reviews/:review_id", patchReview);
 app.get("/api/users", getUsers);
 app.get("/api/reviews", getAllReviews);
+app.get("/api/reviews/:review_id/comments", getCommentsById);
 
 app.use("*", handleInvalidPaths);
 
