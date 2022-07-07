@@ -46,3 +46,18 @@ exports.updateReviewById = (review_id, newVote) => {
     });
 };
 //hi
+exports.fetchAllReviews = () => {
+  return db
+    .query(
+      `
+      SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+      FROM reviews
+      LEFT JOIN comments ON comments.review_id = reviews.review_id
+      GROUP BY reviews.review_id
+      ORDER BY created_at DESC`
+    )
+    .then((result) => {
+      console.log(result.rows, "<<<<<<< model");
+      return result.rows;
+    });
+};

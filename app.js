@@ -5,7 +5,11 @@ const {
   handlePsqlErrors,
   handleCustomErrors,
 } = require("./Controllers/err.c");
-const { getReviewById, patchReview } = require("./Controllers/reviews.c");
+const {
+  getReviewById,
+  patchReview,
+  getAllReviews,
+} = require("./Controllers/reviews.c");
 const { getCategories } = require("./Controllers/categories.c");
 const { getUsers } = require("./Controllers/users.c");
 
@@ -17,6 +21,7 @@ app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReviewById);
 app.patch("/api/reviews/:review_id", patchReview);
 app.get("/api/users", getUsers);
+app.get("/api/reviews", getAllReviews);
 
 app.use("*", handleInvalidPaths);
 
