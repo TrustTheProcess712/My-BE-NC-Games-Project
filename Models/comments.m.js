@@ -52,7 +52,7 @@ exports.insertComment = (review_id, newComment) => {
     .then((result) => {
       if (result.rows.length === 0) {
         return Promise.reject({
-          status: 400,
+          status: 404,
           msg: "Sorry, invalid username!",
         });
       }

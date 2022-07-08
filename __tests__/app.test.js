@@ -396,7 +396,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
     };
     return request(app)
       .post("/api/reviews/2/comments")
-      .expect(400)
+      .expect(404)
       .send(newComment)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Sorry, invalid username!");
@@ -432,6 +432,19 @@ describe("POST /api/reviews/:review_id/comments", () => {
     const newComment = {
       username: "mallionaire",
       body: "This game is awesome!",
+    };
+    return request(app)
+      .post("/api/reviews/notAnID/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed a request with missing keys username/object", () => {
+    const newComment = {
+      // username: "mallionaire",
+      // // body: "This game is awesome!",
     };
     return request(app)
       .post("/api/reviews/notAnID/comments")
