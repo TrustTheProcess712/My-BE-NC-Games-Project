@@ -1,4 +1,5 @@
 const request = require("supertest");
+const { response } = require("../app");
 const app = require("../app");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
@@ -361,6 +362,83 @@ describe("GET /api/reviews/:review_id/comments", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Review not found for review_id: 775");
+      });
+  });
+});
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("responds with new comment added to the correct review object", () => {
+    const newComment = {
+      username: "mallionaire",
+      body: "This game is awesome!",
+    };
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            body: "This game is awesome!",
+            review_id: 2,
+            author: "mallionaire",
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+  test("status:400, responds with a bad request error message when passed an invalid username", () => {
+    const newComment = {
+      username: "invalid",
+      body: "This game is awesome!",
+    };
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Sorry, invalid username!");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed an invalid or empty body", () => {
+    const newComment = {
+      username: "mallionaire",
+      body: undefined,
+    };
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
+      });
+  });
+  test("status:404, respond with an error message when passed a valid ID number that is not found", () => {
+    const newComment = {
+      username: "mallionaire",
+      body: "This game is awesome!",
+    };
+    return request(app)
+      .post("/api/reviews/9999/comments")
+      .expect(404)
+      .send(newComment)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Review not found for review_id: 9999");
+      });
+  });
+  test("status:400, responds with a bad request error message when passed a bad review ID", () => {
+    const newComment = {
+      username: "mallionaire",
+      body: "This game is awesome!",
+    };
+    return request(app)
+      .post("/api/reviews/notAnID/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request, Invalid Input");
       });
   });
 });

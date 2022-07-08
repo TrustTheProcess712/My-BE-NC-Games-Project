@@ -33,3 +33,41 @@ WHERE comment_id = $1`,
       }
     });
 };
+exports.insertComment = (review_id, newComment) => {
+  const { username, body } = newComment;
+  if (body === undefined) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad Request, Invalid Input",
+    });
+  }
+  return db
+    .query(
+      `
+    SELECT FROM users
+    WHERE users.username = $1
+    ;`,
+      [username]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          status: 400,
+          msg: "Sorry, invalid username!",
+        });
+      }
+    })
+    .then(() => {
+      return db.query(
+        `
+        INSERT INTO comments (body, review_id, author)
+        VALUES ($1, $2, $3)
+        RETURNING*
+        `,
+        [body, review_id, username]
+      );
+    })
+    .then((result) => {
+      return result.rows[0];
+    });
+};
