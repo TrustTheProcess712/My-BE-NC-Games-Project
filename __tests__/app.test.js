@@ -367,7 +367,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
 });
 
 describe("POST /api/reviews/:review_id/comments", () => {
-  test("responds with new comment added to the correct review object", () => {
+  test("status: 201, responds with new comment added to the correct review object", () => {
     const newComment = {
       username: "mallionaire",
       body: "This game is awesome!",
@@ -453,5 +453,16 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad Request, Invalid Input");
       });
+  });
+});
+
+describe("GET /api/reviews (queries)", () => {
+  test("status: 201, reponds with reviews using defaults", () => {
+    return request(app)
+      .get("/apireviews")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSortedBy("created_at", { descending: true });
+      }); // ticket 11 first test
   });
 });
