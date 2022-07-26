@@ -18,6 +18,7 @@ const {
   postCommentById,
 } = require("./Controllers/comments.c");
 
+app.use(cors());
 const app = express();
 
 app.use(express.json());
@@ -30,8 +31,6 @@ app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsById);
 app.post("/api/reviews/:review_id/comments", postCommentById);
 app.get("/api/reviews"); /// got to here for 11
-
-app.use(cors());
 
 app.use("*", handleInvalidPaths);
 
