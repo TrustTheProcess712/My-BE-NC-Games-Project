@@ -18,8 +18,8 @@ const {
   postCommentById,
 } = require("./Controllers/comments.c");
 
-app.use(cors());
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 
