@@ -10,6 +10,7 @@ const {
   getReviewById,
   patchReview,
   getAllReviews,
+  // getReviews,
 } = require("./Controllers/reviews.c");
 const { getCategories } = require("./Controllers/categories.c");
 const { getUsers } = require("./Controllers/users.c");

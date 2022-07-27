@@ -514,7 +514,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
 //   });
 //   test("404: when passed a valid category that has no reviews responds with not found error message", () => {
 //     return request(app)
-//       .get("/api/reviews?category=children's+games")
+//       .get("/api/reviews?category=children")
 //       .expect(404)
 //       .then(({ body }) => {
 //         expect(body.message).toBe("No Reviews Found");

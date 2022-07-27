@@ -60,7 +60,7 @@ exports.fetchAllReviews = () => {
     });
 };
 
-// exports.selectReviews = (sort_by = "created_at", order = "ASC" category) => {
+// exports.selectReviews = (sort_by = "created_at", order = "ASC", category) => {
 //   const queryValues = [];
 //   const validSortBy = [
 //     "created_at",
@@ -69,43 +69,44 @@ exports.fetchAllReviews = () => {
 //     "designer",
 //     "owner",
 //     "votes",
-//     "category"
+//     "category",
 //   ];
+
 //   const validOrder = ["ASC", "DESC"];
 
-//   if(!validSortBy.includes(sort_by)) {
+//   if (!validSortBy.includes(sort_by)) {
 //     return Promise.reject({
 //       status: 400,
-//       msg: "Invalid sort_by"
+//       msg: "Invalid sort_by",
 //     });
 //   }
 
-//   if(!validOrder.includes(order.toUpperCase())) {
+//   if (!validOrder.includes(order.toUpperCase())) {
 //     return Promise.reject({
 //       status: 400,
-//       msg: "Invalid Order"
-//     })
+//       msg: "Invalid Order",
+//     });
 //   }
 
 //   let queryString = `SELECT * FROM reviews`;
 
-//   if(category) {
+//   if (category) {
 //     queryString.push(category);
 //     queryString += `WHERE category = ${queryValues.length}`;
 //   }
 
-//   if(sort_by || order) {
+//   if (sort_by || order) {
 //     queryString += `ORDER BY ${sort_by} ${order}`;
 //   }
 
-//   return db.query(queryString, queryValues).then((results)=> {
-//     if(results.rows.length === 0) {
+//   return db.query(queryString, queryValues).then((results) => {
+//     if (results.rows.length === 0) {
 //       return Promise.reject({
 //         status: 404,
-//         msg: "No Reviews Found"
+//         msg: "No Reviews Found",
 //       });
-//     }else {
+//     } else {
 //       return results.rows;
 //     }
-//   })
-// }
+//   });
+// };
