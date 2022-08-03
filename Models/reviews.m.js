@@ -1,3 +1,4 @@
+const connection = require("../db/connection");
 const db = require("../db/connection");
 
 exports.fetchReviewById = (review_id) => {
@@ -45,68 +46,98 @@ exports.updateReviewById = (review_id, newVote) => {
     });
 };
 
-exports.fetchAllReviews = () => {
-  return db
-    .query(
-      `
-      SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+exports.fetchAllReviews = async (
+  sort_by = "created_at",
+  order = "DESC",
+  category
+) => {
+  const validSortBy = [
+    "created_at",
+    "review_id",
+    "title",
+    "designer",
+    "owner",
+    "votes",
+    "category",
+  ];
+
+  const validOrder = ["ASC", "DESC", "asc", "desc"];
+
+  if (!validSortBy.includes(sort_by)) {
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid sort_by",
+    });
+  }
+
+  if (!validOrder.includes(order)) {
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid order",
+    });
+  }
+
+  const categoryValidate = await db.query(
+    `SELECT * FROM categories WHERE slug = $1`,
+    [category]
+  );
+
+  if (category) {
+    if (categoryValidate.rowCount === 0) {
+      return Promise.reject({
+        status: 400,
+        msg: "Invalid category",
+      });
+    } else {
+      return db
+        .query(
+          ` SELECT reviews.*, COUNT(comments.review_id)::INT 
+          AS comment_count
+          FROM reviews
+          LEFT JOIN comments ON comments.review_id = reviews.review_id
+          WHERE category = $1
+          GROUP BY reviews.review_id
+          ORDER BY ${sort_by} ${order}`,
+          [category]
+        )
+        .then((result) => {
+          return result.rows;
+        });
+    }
+  } else {
+    return db
+      .query(
+        ` SELECT reviews.*, COUNT(comments.review_id)::INT 
+      AS comment_count
       FROM reviews
       LEFT JOIN comments ON comments.review_id = reviews.review_id
       GROUP BY reviews.review_id
-      ORDER BY created_at DESC`
-    )
-    .then((result) => {
-      return result.rows;
-    });
+      ORDER BY ${sort_by} ${order}`
+      )
+      .then((result) => {
+        return result.rows;
+      });
+  }
+
+  // let queryString = `SELECT * FROM reviews`;
+
+  // if (category) {
+  //   queryString.push(category);
+  //   queryString += `WHERE category = ${queryValues.length}`;
+  // }
+
+  // if (sort_by || order) {
+  //   queryString += `ORDER BY ${sort_by} ${order}`;
+  // }
+
+  // return db.query(queryString, queryValues).then((results) => {
+  //   if (results.rows.length === 0) {
+  //     return Promise.reject({
+  //       status: 404,
+  //       msg: "No Reviews Found",
+  //     });
+  //   } else {
+  //     return results.rows;
+  //   }
+  // });
 };
-
-// exports.selectReviews = (sort_by = "created_at", order = "ASC", category) => {
-//   const queryValues = [];
-//   const validSortBy = [
-//     "created_at",
-//     "review_id",
-//     "title",
-//     "designer",
-//     "owner",
-//     "votes",
-//     "category",
-//   ];
-
-//   const validOrder = ["ASC", "DESC"];
-
-//   if (!validSortBy.includes(sort_by)) {
-//     return Promise.reject({
-//       status: 400,
-//       msg: "Invalid sort_by",
-//     });
-//   }
-
-//   if (!validOrder.includes(order.toUpperCase())) {
-//     return Promise.reject({
-//       status: 400,
-//       msg: "Invalid Order",
-//     });
-//   }
-
-//   let queryString = `SELECT * FROM reviews`;
-
-//   if (category) {
-//     queryString.push(category);
-//     queryString += `WHERE category = ${queryValues.length}`;
-//   }
-
-//   if (sort_by || order) {
-//     queryString += `ORDER BY ${sort_by} ${order}`;
-//   }
-
-//   return db.query(queryString, queryValues).then((results) => {
-//     if (results.rows.length === 0) {
-//       return Promise.reject({
-//         status: 404,
-//         msg: "No Reviews Found",
-//       });
-//     } else {
-//       return results.rows;
-//     }
-//   });
-// };

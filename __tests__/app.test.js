@@ -1,9 +1,9 @@
 const request = require("supertest");
-const { response } = require("../app");
+// const { response } = require("../app");
 const app = require("../app");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
-const reviews = require("../db/data/test-data/reviews");
+// const reviews = require("../db/data/test-data/reviews");
 const seed = require("../db/seeds/seed");
 
 beforeEach(() => {
@@ -456,68 +456,68 @@ describe("POST /api/reviews/:review_id/comments", () => {
   });
 });
 
-// describe("GET /api/reviews?sortby", () => {
-//   test("status: 200, reponds with reviews sorted by default of date", () => {
-//     return request(app)
-//       .get("/apireviews")
-//       .expect(200)
-//       .then(({ body: { reviews } }) => {
-//         expect(reviews).toBeSortedBy("created_at", { descending: true });
-//       });
-//   });
-//   test("status: 200, reponds with reviews sorted by order of given query", () => {
-//     return request(app)
-//       .get("/apireviews?sort_by=votes")
-//       .expect(200)
-//       .then(({ body: { reviews } }) => {
-//         expect(reviews).toBeSortedBy("votes", { descending: true });
-//       });
-//   });
-//   test("status: 200, reponds with reviews sorted by order of given query with a given category", () => {
-//     return request(app)
-//       .get("/apireviews?sort_by=votes&category=dexterity")
-//       .expect(200)
-//       .then(({ body: { reviews } }) => {
-//         reviews.forEach((review) => {
-//           expect(review).toEqual(
-//             expect.objectContaining({
-//               category: "dexterity",
-//             })
-//           );
-//         });
-//         expect(reviews).toBeSortedBy("votes", { descending: true });
-//       });
-//   });
-//   test("400: responds with invalid sort_by error message", () => {
-//     return request(app)
-//       .get("/api/reviews?sort_by=face")
-//       .expect(400)
-//       .then(({ body }) => {
-//         expect(body.message).toBe("Invalid sort_by");
-//       });
-//   });
-//   test("400: responds with invalid order error message", () => {
-//     return request(app)
-//       .get("/api/reviews?order=ss")
-//       .expect(400)
-//       .then(({ body }) => {
-//         expect(body.message).toBe("Invalid order");
-//       });
-//   });
-//   test("404: when passed an invalid category responds with not found error message", () => {
-//     return request(app)
-//       .get("/api/reviews?category=base")
-//       .expect(404)
-//       .then(({ body }) => {
-//         expect(body.message).toBe("No Reviews Found");
-//       });
-//   });
-//   test("404: when passed a valid category that has no reviews responds with not found error message", () => {
-//     return request(app)
-//       .get("/api/reviews?category=children")
-//       .expect(404)
-//       .then(({ body }) => {
-//         expect(body.message).toBe("No Reviews Found");
-//       });
-//   });
-// });
+describe("GET /api/reviews?sortby", () => {
+  test("status: 200, reponds with reviews sorted by default of date decending", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("status: 200, reponds with reviews sorted by order of given query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeSortedBy("votes", { descending: true });
+      });
+  });
+  test("status: 200, reponds with reviews sorted by order of given query with a given category", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes&category=dexterity")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        reviews.forEach((review) => {
+          expect(review).toEqual(
+            expect.objectContaining({
+              category: "dexterity",
+            })
+          );
+        });
+        expect(reviews).toBeSortedBy("votes", { descending: true });
+      });
+  });
+  test("400: responds with invalid sort_by error message", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=face")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid sort_by");
+      });
+  });
+  test("400: responds with invalid order error message", () => {
+    return request(app)
+      .get("/api/reviews?order=ss")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid order");
+      });
+  });
+  test("400: when passed an invalid category responds with not found error message", () => {
+    return request(app)
+      .get("/api/reviews?category=base")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid category");
+      });
+  });
+  // test("404: when passed a valid category that has no reviews responds with not found error message", () => {
+  //   return request(app)
+  //     .get("/api/reviews?category=children")
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.message).toBe("No Reviews Found");
+  //     });
+  // });
+});

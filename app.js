@@ -31,7 +31,7 @@ app.get("/api/users", getUsers);
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsById);
 app.post("/api/reviews/:review_id/comments", postCommentById);
-app.get("/api/reviews"); /// got to here for 11
+// app.get("/api/reviews"); /// got to here for 11
 
 app.use("*", handleInvalidPaths);
 
