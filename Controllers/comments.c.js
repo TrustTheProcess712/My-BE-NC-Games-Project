@@ -1,3 +1,4 @@
+const endpoints = require("../endpoints.json");
 const { fetchReviewById } = require("../Models/reviews.m");
 const {
   fetchCommentsById,
@@ -31,7 +32,6 @@ exports.postCommentById = async (req, res, next) => {
 
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;
-  console.log(comment_id, "<<<<<");
   removeComment(comment_id)
     .then(() => {
       res.sendStatus(204);
@@ -39,4 +39,8 @@ exports.deleteCommentById = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getEndpoints = (req, res, next) => {
+  res.status(200).send({ endpoints });
 };
