@@ -1,4 +1,3 @@
-const connection = require("../db/connection");
 const db = require("../db/connection");
 
 exports.fetchReviewById = (review_id) => {

@@ -10,7 +10,6 @@ const {
   getReviewById,
   patchReview,
   getAllReviews,
-  // getReviews,
 } = require("./Controllers/reviews.c");
 const { getCategories } = require("./Controllers/categories.c");
 const { getUsers } = require("./Controllers/users.c");
@@ -26,12 +25,11 @@ app.use(express.json());
 
 app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReviewById);
-app.patch("/api/reviews/:review_id", patchReview);
 app.get("/api/users", getUsers);
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsById);
+app.patch("/api/reviews/:review_id", patchReview);
 app.post("/api/reviews/:review_id/comments", postCommentById);
-// app.get("/api/reviews"); /// got to here for 11
 
 app.use("*", handleInvalidPaths);
 
