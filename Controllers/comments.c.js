@@ -1,9 +1,10 @@
+const { fetchReviewById } = require("../Models/reviews.m");
 const {
   fetchCommentsById,
   selectComments,
   insertComment,
+  removeComment,
 } = require("../Models/comments.m");
-const { fetchReviewById } = require("../Models/reviews.m");
 
 exports.getCommentsById = async (req, res, next) => {
   try {
@@ -26,4 +27,16 @@ exports.postCommentById = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  console.log(comment_id, "<<<<<");
+  removeComment(comment_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

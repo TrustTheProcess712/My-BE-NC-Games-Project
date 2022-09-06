@@ -16,9 +16,11 @@ const { getUsers } = require("./Controllers/users.c");
 const {
   getCommentsById,
   postCommentById,
+  deleteCommentById,
 } = require("./Controllers/comments.c");
 
 const app = express();
+
 app.use(cors());
 
 app.use(express.json());
@@ -30,6 +32,7 @@ app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsById);
 app.patch("/api/reviews/:review_id", patchReview);
 app.post("/api/reviews/:review_id/comments", postCommentById);
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.use("*", handleInvalidPaths);
 

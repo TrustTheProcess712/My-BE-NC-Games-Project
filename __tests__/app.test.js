@@ -518,3 +518,9 @@ describe("GET /api/reviews?sortby", () => {
   //     });
   // });
 });
+
+describe.only("DELETE /api/comments/:comment_id", () => {
+  test("status 204:", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+});
