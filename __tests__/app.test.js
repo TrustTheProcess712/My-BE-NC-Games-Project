@@ -10,7 +10,7 @@ beforeEach(() => {
 
 afterAll(() => db.end());
 
-describe("games api errors", () => {
+describe("GET api errors", () => {
   test("status:404, handles path not found", () => {
     return request(app)
       .get("/api/bad_path")
