@@ -2,9 +2,9 @@
 
 Welcome!
 
-Here I have built my first API for the purpose of accessing application data proframmatically.
+Here I have built my first API for the purpose of accessing application data programmatically.
 
-This is the backend to my project: Ste's Game Reviews. A project that will look at the reviews of games and allow users to comment/vote on them.
+This is the back-end to my project: Ste's Game Reviews. A project that will look at the reviews of games and allow users to comment/vote on them.
 
 ## Connect to the Databases Locally
 
